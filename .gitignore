@@ -2,3 +2,6 @@
 
 .secret/
 **/secret/
+
+.transaction_media/
+**/transaction_media/
