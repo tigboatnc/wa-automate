@@ -2,7 +2,8 @@
 - Only supports one user per instance, which is __hardcoded__ into the code. 
 - Since whatsapp values contact syncing, I bypass that system by only using numbers. 
 
-
+# BIG TODO 
+- [ ] Sync Read and send messages (From Conversation and WAQUEUE)
 
 
 
