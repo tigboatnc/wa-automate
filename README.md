@@ -4,7 +4,12 @@
 
 # BIG TODO 
 - [ ] Sync Read and send messages (From Conversation and WAQUEUE)
-
+- [ ] What happens on append ? ? ?? ? ? 
+- [ ] Check if correct profile open in single send 
+- [ ] Implement Batch Delete !!!! Very Very Important
+- [ ] Ask shivam to change attachment type from __sent__  to __send type__ !!! im angry af .
+- [ ] Remove TabRead Altogether (for now)
+- [ ] Push to conversations  ******
 
 
 
