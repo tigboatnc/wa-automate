@@ -159,7 +159,7 @@ def on_snapshot(col_snapshot, changes, read_time):
     callback_done.set()
     
 
-col_query = db.collection(u'clients').document(u'YIJ3bLzUXlubsxnDPnDR').collection(u'projects').document(u'BOuyALnDYmDHSBW7kAZm').collection('wa-queue').where(u'processed', u'==', False)
+col_query = db.collection(u'clients').document(u'YIJ3bLzUXlubsxnDPnDR').collection(u'projects').document(u'BOuyALnDYmDHSBW7kAZm').collection('wa-queue').where(u'type', u'!=', u'tabread')
 
 # Watch the collection query
 query_watch = col_query.on_snapshot(on_snapshot)

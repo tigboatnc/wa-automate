@@ -10,6 +10,8 @@
 - [ ] Ask shivam to change attachment type from __sent__  to __send type__ !!! im angry af .
 - [ ] Remove TabRead Altogether (for now)
 - [ ] Push to conversations  ******
+- [ ] Startup causes first message to fail -> Add wait/ Check / timeout please
+
 
 
 
