@@ -11,6 +11,7 @@
 - [ ] Remove TabRead Altogether (for now)
 - [ ] Push to conversations  ******
 - [ ] Startup causes first message to fail -> Add wait/ Check / timeout please
+- [ ] Add user search into clippy 
 
 
 

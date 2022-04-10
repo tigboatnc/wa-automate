@@ -349,6 +349,7 @@ def F_TOGGLE_CLIPPY_ON(driverVar,trial=0):
             return 1
         else:
             print('[F_TOGGLE_CLIPPY_ON]->Error, in opening clippy, retrying','[try]: ',trial)
+
             F_TOGGLE_CLIPPY_ON(driverVar,trial = trial + 1)
             
             
@@ -394,6 +395,7 @@ def F_GET_FILE(attachment_url):
 def F_RECURSIVE_SEND_ATTACHMENT(driverVar,contact_number,attachment_address,trial_number=0):
     
     F_SEARCH_2(driverVar,contact_number)
+    time.sleep(5)
     F_TOGGLE_CLIPPY_ON(driver)
     
     time.sleep(2)
@@ -453,6 +455,7 @@ def F_RECURSIVE_SEND_ATTACHMENT(driverVar,contact_number,attachment_address,tria
 
 # In[ ]:
 
+time.sleep(20)
 
 while True:
     if FIREBASEAGENT.queue_length > 0 :
