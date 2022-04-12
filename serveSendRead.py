@@ -453,7 +453,7 @@ def F_RECURSIVE_SEND_ATTACHMENT(driverVar,contact_number,attachment_address,tria
 
 # In[ ]:
 
-
+exit()
 while True:
     if FIREBASEAGENT.queue_length > 0 :
         for task in FIREBASEAGENT.queue:
