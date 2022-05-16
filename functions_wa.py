@@ -11,6 +11,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from functions_utils import *
 from selenium.webdriver.common.by import By
+from datetime import datetime, timedelta
+import pandas as pd
+from dateutil.parser import parse
 
 def WA_messageTextParser(driver):
     # --------------------------------------
@@ -23,13 +26,10 @@ def WA_messageTextParser(driver):
     # Scrolling -------------------------------------
     
     chat_component = driver.find_elements(By.XPATH,f"//div[@role='region']")[0]
-    
-    driver.execute_script("arguments[0].scrollIntoView();", chat_component)
     time.sleep(2)
     driver.execute_script("arguments[0].scrollIntoView();", chat_component)
     time.sleep(2)
-    driver.execute_script("arguments[0].scrollIntoView();", chat_component)
-    time.sleep(2)
+
 
     CORPUS = [] 
     chat_component = driver.find_elements(By.XPATH,f"//div[@role='region']")[0]
@@ -73,7 +73,7 @@ def WA_messageTextParser(driver):
             TEMP_PUSH.append({
                 'time' : timeSplit,
                 'msg':message,
-                'type':'mi'})
+                'type':'mo'})
 
         elif division['type']=='fli':
             selected_date = -1
@@ -262,3 +262,93 @@ def WA_SINGLE_SEND(driverVar,text_message):
             chatElement.send_keys(f'{text_message}')
             time.sleep(2)
             chatElement.send_keys(Keys.RETURN)
+
+
+def WA_parse_message_list(msg):
+    today = datetime.today()
+    yesterday = today - timedelta(days=1)
+    one_week_ago = today - timedelta(days=7)
+    thirty_days_ago = today - timedelta(days=30)
+    DATELIST = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY']
+    MSG_LIST = []
+    for message in msg:
+        DATE = message['date']
+        CONTENT = message['msg']
+        TIME = parse(message['time'])
+        
+        if DATE == 'TODAY':
+            DATE_P = today
+        elif DATE == 'YESTERDAY':
+            DATE_P = today - timedelta(days=1)
+        elif '/' in DATE:
+            DATE_P = parse(DATE)
+        else: 
+            dateIndex = DATELIST.index(DATE)
+            timeDelta = today.weekday() - dateIndex
+            DATE_P = today - timedelta(days=timeDelta)
+        
+        hour = TIME.hour
+        minute = TIME.minute
+        DATE_P = DATE_P.replace(hour=hour, minute=minute,second = 0)
+        
+        
+        MSG_LIST.append ({
+            'TIMESTAMP' : DATE_P,
+            'CONTENT' : CONTENT,
+            'TYPE' : message['type'],
+            
+        })
+        
+        df = pd.DataFrame(MSG_LIST)
+        return df
+
+
+def WA_OpenGallery2(driver,trialNumber,found):
+    # Very messy function 
+    
+    head_component = driver.find_elements(By.XPATH,f"//div[@id='app']")[0]
+    modal_component = head_component.find_elements(By.XPATH,f".//div[@data-testid='media-viewer-modal']")
+
+    if len(modal_component) == 1:
+        print('Found Modal')
+        found = 1 
+        return True
+    trialNumber = trialNumber + 1 
+
+    if trialNumber>5:
+        print('Cannot find gallery hook')
+        return False
+    else:
+        print(f'Open Gallery, Trial : {trialNumber}')
+
+    time.sleep(2)
+    chat_component = driver.find_elements(By.XPATH,f"//div[@role='region']")[0]
+    img_dl = chat_component.find_elements(By.XPATH,".//div[@data-testid='media-state-download']")
+    img_dld = chat_component.find_elements(By.XPATH,".//div[@data-testid='media-url-provider']")
+
+    if len(img_dl) + len(img_dld) == 0:
+        chat_component = driver.find_elements(By.XPATH,f"//div[@role='region']")[0]
+        driver.execute_script("arguments[0].scrollIntoView();", chat_component)
+        time.sleep(1)
+        WA_OpenGallery2(driver,trialNumber+1,0)
+
+    for element in img_dl + img_dld:
+        try:
+            element.click()
+            head_component = driver.find_elements(By.XPATH,f"//div[@id='app']")[0]
+            time.sleep(2)
+            modal_component = head_component.find_elements(By.XPATH,f".//div[@data-testid='media-viewer-modal']")
+
+            if len(modal_component) == 1:
+                print('Found Modal')
+                found = 1 
+                return True
+            else:
+                continue
+
+        except Exception:
+            print('Tried Clicking, error')
+
+    if found == 0 :
+        WA_OpenGallery2(driver,trialNumber+1,0)
+        
